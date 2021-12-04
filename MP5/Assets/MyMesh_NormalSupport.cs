@@ -34,7 +34,7 @@ public partial class MyMesh : MonoBehaviour {
         return Vector3.Cross(a, b).normalized;
     }
 
-    void ComputeNormals(Vector3[] v, Vector3[] n)
+    void ComputeNormals(Vector3[] v, Vector3[] n, int[] t)
     {
         Vector3[] triNormal = new Vector3[numTriangles];
 
@@ -78,17 +78,43 @@ public partial class MyMesh : MonoBehaviour {
         // triNormal[6] = FaceNormal(v, 7, 8, 4);
         // triNormal[7] = FaceNormal(v, 4, 8, 5);
 
-        // the common thing for this is that it includes all triangles that include the vertex
-        // each triangle has its own triNormal (e.g. triangle 1 has triNormal[1])
-        n[0] = (triNormal[0] + triNormal[1]).normalized;
-        n[1] = (triNormal[1] + triNormal[2] + triNormal[3]).normalized;
-        n[2] = triNormal[3].normalized;
-        n[3] = (triNormal[0] + triNormal[4] + triNormal[5]).normalized;
-        n[4] = (triNormal[0] + triNormal[1] + triNormal[2] + triNormal[5] + triNormal[6] + triNormal[7]).normalized;
-        n[5] = (triNormal[2] + triNormal[3]).normalized;
-        n[6] = triNormal[4].normalized;
-        n[7] = (triNormal[4] + triNormal[5] + triNormal[6]).normalized;
-        n[8] = (triNormal[6] + triNormal[7]).normalized;
+        // n[0] = (triNormal[0] + triNormal[1]).normalized;
+        // n[1] = (triNormal[1] + triNormal[2] + triNormal[3]).normalized;
+        // n[2] = triNormal[3].normalized;
+        // n[3] = (triNormal[0] + triNormal[4] + triNormal[5]).normalized;
+        // n[4] = (triNormal[0] + triNormal[1] + triNormal[2] + triNormal[5] + triNormal[6] + triNormal[7]).normalized;
+        // n[5] = (triNormal[2] + triNormal[3]).normalized;
+        // n[6] = triNormal[4].normalized;
+        // n[7] = (triNormal[4] + triNormal[5] + triNormal[6]).normalized;
+        // n[8] = (triNormal[6] + triNormal[7]).normalized;
+        // UpdateNormals(v, n);
+
+
+        // Algorithm : include all triangles with vertex
+        // Steps: go through vertices, go through triangles, if triangle has vertex, include triangle
+
+        for (int p = 0; p < verticesNum; p++){ // cur vertex
+            // List<Vector3> averageNormals = new List<Vector3>();
+            Vector3 averageNormals = Vector3.zero;
+            
+            for(int q = 0; q < numTriangles; q++){ // cur triangle
+                
+                if (t[q*3+0] == p){ // vertex 0 in cur trianlge
+                    // averageNormals.Add(triNormal[q]); // add triangle to lst
+                    averageNormals += triNormal[q];
+                }
+                else if (t[q*3+1] == p){ 
+                    // averageNormals.Add(triNormal[q]);
+                    averageNormals += triNormal[q];
+                }
+                else if (t[q*3+2] == p){ 
+                    // averageNormals.Add(triNormal[q]);
+                    averageNormals += triNormal[q];
+                }
+            }
+            
+            n[p] = -averageNormals.normalized;
+        }
         UpdateNormals(v, n);
     }
 }

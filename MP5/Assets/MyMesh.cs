@@ -4,9 +4,9 @@ using UnityEngine;
 
 public partial class MyMesh : MonoBehaviour {
 
-    int cylinderRes = 4;
-    int verticesPerRow = 4;
-    int mesh_num = 3;
+    int cylinderRes = 8;
+    int verticesPerRow = 8;
+    int mesh_num = 7;
 
     int numTriangles;
     int trianglesPerRow;
@@ -163,11 +163,12 @@ public partial class MyMesh : MonoBehaviour {
         Mesh theMesh = GetComponent<MeshFilter>().mesh;
         Vector3[] v = theMesh.vertices;
         Vector3[] n = theMesh.normals;
+        int[] t = theMesh.triangles;
         for (int m = 0; m<mControllers.Length; m++)
         {
             v[m] = mControllers[m].transform.localPosition;
         }
-        ComputeNormals(v, n);
+        ComputeNormals(v, n, t);
 
         theMesh.vertices = v;
         theMesh.normals = n;
