@@ -4,7 +4,12 @@ using UnityEngine;
 
 public partial class MyMesh : MonoBehaviour {
 
-    int cylinderRes = 8;
+    public SliderWithEcho ResSlider;
+
+    public const int MinRes = 2;
+    public const int MaxRes = 20;
+
+    int resolution = 8;
     int verticesPerRow = 8;
     int mesh_num = 7;
 
@@ -12,25 +17,37 @@ public partial class MyMesh : MonoBehaviour {
     int trianglesPerRow;
     int verticesNum;
 
+    Vector3[] vertices;
+    Vector3[] normals;
+    int[] triangles;
+
+    Mesh theMesh;
+    
+
 	// Use this for initialization
 	void Start () {
-        
+        theMesh = GetComponent<MeshFilter>().mesh;
+        Debug.Assert(theMesh != null);
+
+        ResSlider.InitSliderRange(MinRes, MaxRes, 5);
+
+        ResSlider.SetSliderListener(SetRes);    
         // For 2x2 Mesh
         // int cylinderRes = 3;
         // int verticesPerRow = 3;
         // int mesh_num = 2;
         // int cylinderRotation = 360;
 
-        numTriangles = (cylinderRes-1)*(cylinderRes-1)*2; // Number of triangles: 2x2 mesh and 2x triangles on each mesh-unit
+        numTriangles = (resolution-1)*(resolution-1)*2; // Number of triangles: 2x2 mesh and 2x triangles on each mesh-unit
         trianglesPerRow = mesh_num*2;
-        verticesNum = cylinderRes*cylinderRes; // 2x2 mesh needs 3x3 vertices
+        verticesNum = resolution*resolution; // 2x2 mesh needs 3x3 vertices
 
-        Mesh theMesh = GetComponent<MeshFilter>().mesh;   // get the mesh component
+          // get the mesh component
         theMesh.Clear();    // delete whatever is there!!
 
-        Vector3[] v = new Vector3[verticesNum]; // 9   
-        int[] t = new int[numTriangles*3]; // 8*3         
-        Vector3[] n = new Vector3[verticesNum]; // 9
+        vertices = new Vector3[verticesNum]; // 9   
+        triangles = new int[numTriangles*3]; // 8*3         
+        normals = new Vector3[verticesNum]; // 9
 
 
         // 3x3 vectors for 2x2 mesh
@@ -51,12 +68,12 @@ public partial class MyMesh : MonoBehaviour {
         float deltaDis = quad_size_n/mesh_num;
         float kStartPos = -0.5f*quad_size_n;
 
-        for (int i = 0; i < cylinderRes; i++)
+        for (int i = 0; i < resolution; i++)
         {
-            for (int j = 0; j < cylinderRes; j++)
+            for (int j = 0; j < resolution; j++)
             {
-                v[i*cylinderRes + j] = new Vector3(kStartPos+deltaDis*i,0, kStartPos+deltaDis*j);
-                int temp_index = i*cylinderRes + j;
+                vertices[i*resolution + j] = new Vector3(kStartPos+deltaDis*i,0, kStartPos+deltaDis*j);
+                int temp_index = i*resolution + j;
                 // Debug.Log(temp_index.ToString() + " = " + v[i*cylinderRes + j]);
 
             }
@@ -65,7 +82,7 @@ public partial class MyMesh : MonoBehaviour {
         // n
         for (int k = 0; k < verticesNum; k++)
         {
-            n[k] = new Vector3(0, 1, 0);
+            normals[k] = new Vector3(0, 1, 0);
         }
 
         // t
@@ -76,20 +93,20 @@ public partial class MyMesh : MonoBehaviour {
             // Debug.Log( "pos_in_lst = " + pos_in_lst);
 
             if(l%2 == 0){ // even
-                t[l*3+0] = row_num + pos_in_lst; // row # + triangle pos in even list
-                t[l*3+1] = (row_num + pos_in_lst) + verticesPerRow; // 1st + vertices per row
-                t[l*3+2] = ((row_num + pos_in_lst) + verticesPerRow) + 1; // 2nd + 1
+                triangles[l*3+0] = row_num + pos_in_lst; // row # + triangle pos in even list
+                triangles[l*3+1] = (row_num + pos_in_lst) + verticesPerRow; // 1st + vertices per row
+                triangles[l*3+2] = ((row_num + pos_in_lst) + verticesPerRow) + 1; // 2nd + 1
             }
             else // odd
             {
-                t[l*3+0] = row_num + pos_in_lst; // row # + triangle pos in odd list
-                t[l*3+1] = (row_num + pos_in_lst) + verticesPerRow + 1; // 1st + vertices per row + 1
-                t[l*3+2] = (row_num + pos_in_lst) + 1; // 1st + 1
+                triangles[l*3+0] = row_num + pos_in_lst; // row # + triangle pos in odd list
+                triangles[l*3+1] = (row_num + pos_in_lst) + verticesPerRow + 1; // 1st + vertices per row + 1
+                triangles[l*3+2] = (row_num + pos_in_lst) + 1; // 1st + 1
             }
 
-            Debug.Log( (l*3+0).ToString() + " = " + t[l*3+0]);
-            Debug.Log( (l*3+1).ToString() + " = " + t[l*3+1]);
-            Debug.Log( (l*3+2).ToString() + " = " + t[l*3+2]);
+            //Debug.Log( (l*3+0).ToString() + " = " + triangles[l*3+0]);
+            //Debug.Log( (l*3+1).ToString() + " = " + triangles[l*3+1]);
+            //Debug.Log( (l*3+2).ToString() + " = " + triangles[l*3+2]);
 
         }
 
@@ -130,12 +147,12 @@ public partial class MyMesh : MonoBehaviour {
         // t[18] = 4; t[19] = 7; t[20] = 8;  // 6th triangle
         // t[21] = 4; t[22] = 8; t[23] = 5;  // 7th triangle
 
-        theMesh.vertices = v; //  new Vector3[3];
-        theMesh.triangles = t; //  new int[3];
-        theMesh.normals = n;
+        theMesh.vertices = vertices; //  new Vector3[3];
+        theMesh.triangles = triangles; //  new int[3];
+        theMesh.normals = normals;
 
-        InitControllers(v);
-        InitNormals(v, n);
+        InitControllers(vertices);
+        InitNormals(vertices, normals);
 
         #region define a circle
         //{
@@ -160,17 +177,84 @@ public partial class MyMesh : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Mesh theMesh = GetComponent<MeshFilter>().mesh;
-        Vector3[] v = theMesh.vertices;
-        Vector3[] n = theMesh.normals;
-        int[] t = theMesh.triangles;
+        vertices = theMesh.vertices;
+        normals = theMesh.normals;
+        triangles = theMesh.triangles;
         for (int m = 0; m<mControllers.Length; m++)
         {
-            v[m] = mControllers[m].transform.localPosition;
+            vertices[m] = mControllers[m].transform.localPosition;
         }
-        ComputeNormals(v, n, t);
+        ComputeNormals(vertices, normals, triangles);
 
-        theMesh.vertices = v;
-        theMesh.normals = n;
+        theMesh.vertices = vertices;
+        theMesh.normals = normals;
 	}
+
+    void SetVerticies(float res)
+    {
+        theMesh.Clear();
+        //AxisFrame.gameObject.SetActive(false);
+        //isActive = false;
+        resolution = (int)res;
+
+        vertices = new Vector3[resolution * resolution];
+        normals = new Vector3[resolution * resolution];
+
+        float quad_size_n = 3f;
+        float deltaDis = quad_size_n/mesh_num;
+        float kStartPos = -0.5f*quad_size_n;
+
+        for (int i = 0; i < resolution; i++)
+        {
+            for (int j = 0; j < resolution; j++)
+            {
+                vertices[i*resolution + j] = new Vector3(kStartPos+deltaDis*i,0, kStartPos+deltaDis*j);
+                int temp_index = i*resolution + j;
+                // Debug.Log(temp_index.ToString() + " = " + v[i*cylinderRes + j]);
+
+            }
+        }
+
+        for (int k = 0; k < verticesNum; k++)
+        {
+            normals[k] = new Vector3(0, 1, 0);
+        }
+
+        for (int l = 0; l < numTriangles; l++)
+        {
+            int row_num = l/trianglesPerRow;
+            int pos_in_lst = l/2;
+            // Debug.Log( "pos_in_lst = " + pos_in_lst);
+
+            if(l%2 == 0){ // even
+                triangles[l*3+0] = row_num + pos_in_lst; // row # + triangle pos in even list
+                triangles[l*3+1] = (row_num + pos_in_lst) + verticesPerRow; // 1st + vertices per row
+                triangles[l*3+2] = ((row_num + pos_in_lst) + verticesPerRow) + 1; // 2nd + 1
+            }
+            else // odd
+            {
+                triangles[l*3+0] = row_num + pos_in_lst; // row # + triangle pos in odd list
+                triangles[l*3+1] = (row_num + pos_in_lst) + verticesPerRow + 1; // 1st + vertices per row + 1
+                triangles[l*3+2] = (row_num + pos_in_lst) + 1; // 1st + 1
+            }
+
+            //Debug.Log( (l*3+0).ToString() + " = " + triangles[l*3+0]);
+            //Debug.Log( (l*3+1).ToString() + " = " + triangles[l*3+1]);
+            //Debug.Log( (l*3+2).ToString() + " = " + triangles[l*3+2]);
+
+        }
+
+        InitControllers(vertices);
+        InitNormals(vertices, normals);
+
+        for (int m = 0; m<mControllers.Length; m++)
+        {
+            vertices[m] = mControllers[m].transform.localPosition;
+        }
+        ComputeNormals(vertices, normals, triangles);
+
+        theMesh.vertices = vertices; //  new Vector3[3];
+        theMesh.triangles = triangles; //  new int[3];
+        theMesh.normals = normals;
+    }
 }
