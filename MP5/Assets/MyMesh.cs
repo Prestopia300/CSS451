@@ -8,6 +8,7 @@ public partial class MyMesh : MonoBehaviour {
 
     public Vector3 UVt = Vector3.zero;
     public Vector3 UVs = Vector3.one;
+    public float UVr = 0f;
 
     public const int MinRes = 2;
     public const int MaxRes = 20;
@@ -64,6 +65,7 @@ public partial class MyMesh : MonoBehaviour {
 
         UVs = Vector3.one;
         UVt = Vector3.zero;
+        UVr = 0f;
         FindObjectOfType<XformControl>().SetSelectedObject(this);
         #region define a circle
         //{
@@ -220,7 +222,8 @@ public partial class MyMesh : MonoBehaviour {
     {
         Vector2 t = new Vector2(UVt.x, UVt.y);
         Vector2 s = new Vector2(UVs.x, UVs.y);
-        Matrix3x3 uvTRS = Matrix3x3Helpers.CreateTRS(t, 0f, s);
+        float r = UVr;
+        Matrix3x3 uvTRS = Matrix3x3Helpers.CreateTRS(t, r, s);
 
         for(int i = 0, y = 0; y < resolution; y++)
         {

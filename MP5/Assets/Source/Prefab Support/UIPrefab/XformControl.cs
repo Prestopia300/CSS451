@@ -130,7 +130,7 @@ public class XformControl : MonoBehaviour {
             if (mSelected != null)
             {
                 p = mSelected.UVs;
-                Debug.Log("received" + mSelected.UVs);
+                //Debug.Log("received" + mSelected.UVs);
             }
             else
                 p = Vector3.one;
@@ -156,7 +156,7 @@ public class XformControl : MonoBehaviour {
             mSelected.UVs = p;
         } else
         {
-            // mSelected. *= q;
+            mSelected.UVr = p.z;
         }
     }
 }
