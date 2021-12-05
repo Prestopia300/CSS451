@@ -45,9 +45,7 @@ public partial class MyMesh : MonoBehaviour {
         theMesh = GetComponent<MeshFilter>().mesh;
         Debug.Assert(theMesh != null);
 
-        ResSlider.InitSliderRange(MinRes, MaxRes, 8);
-
-        ResSlider.SetSliderListener(SetRes);    
+        
 
         vertices = new Vector3[verticesNum]; // 9   
         triangles = new int[numTriangles*3]; // 8*3         
@@ -58,6 +56,13 @@ public partial class MyMesh : MonoBehaviour {
 
         CalculateEverything();
 
+        ToggleController(false);
+
+        ResSlider.InitSliderRange(MinRes, MaxRes, 8);
+
+        ResSlider.SetSliderListener(SetRes);
+
+        FindObjectOfType<XformControl>().SetSelectedObject(this);
         #region define a circle
         //{
         //    Vector3 initSize = new Vector3(0.2f, 0.2f, 0.2f);
@@ -222,5 +227,20 @@ public partial class MyMesh : MonoBehaviour {
                 uv[i] = Matrix3x3.MultiplyVector2(uvTRS, origUV[i]);
             }
         }
+    }
+
+    public void ToggleController(bool b)
+    {
+        foreach(GameObject g in mControllers)
+        {
+            g.SetActive(b);
+        }
+
+        foreach(var g in mNormals)
+        {
+            g.gameObject.SetActive(b);
+        }
+
+        //Debug.Log("Toggled" + b);
     }
 }

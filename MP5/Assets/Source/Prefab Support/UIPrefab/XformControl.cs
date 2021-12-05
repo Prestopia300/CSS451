@@ -13,6 +13,7 @@ public class XformControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
         T.onValueChanged.AddListener(SetToTranslation);
         R.onValueChanged.AddListener(SetToRotation);
         S.onValueChanged.AddListener(SetToScaling);
@@ -127,7 +128,10 @@ public class XformControl : MonoBehaviour {
         else if (S.isOn)
         {
             if (mSelected != null)
+            {
                 p = mSelected.UVs;
+                Debug.Log("received" + mSelected.UVs);
+            }
             else
                 p = Vector3.one;
         }

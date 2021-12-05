@@ -15,6 +15,7 @@ public partial class MyMesh : MonoBehaviour {
             mNormals[i] = o.AddComponent<LineSegment>();
             mNormals[i].SetWidth(0.05f);
             mNormals[i].transform.SetParent(this.transform);
+
         }
         UpdateNormals(v, n);
     }

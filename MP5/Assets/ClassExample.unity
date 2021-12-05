@@ -256,6 +256,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: XformControl
       objectReference: {fileID: 0}
+    - target: {fileID: 114582510350720084, guid: 1bc3e81e805883f4eb627f6f11e25dbf, type: 3}
+      propertyPath: mSelected
+      value: 
+      objectReference: {fileID: 1812200717}
     - target: {fileID: 224089200365230334, guid: 1bc3e81e805883f4eb627f6f11e25dbf, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -775,6 +779,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ResSlider: {fileID: 674443714}
+  UVt: {x: 0, y: 0, z: 0}
+  UVs: {x: 0, y: 0, z: 0}
 --- !u!23 &1812200718
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -794,7 +800,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1503f18dbd9a6b642be2b113ddeb0b8c, type: 2}
+  - {fileID: 2100000, guid: 914a0c3b19d78a943ad4b0e3012101f5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

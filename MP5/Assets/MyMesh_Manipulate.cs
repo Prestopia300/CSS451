@@ -16,6 +16,12 @@ public partial class MyMesh : MonoBehaviour {
 
             mControllers[i].transform.localPosition = v[i];
             mControllers[i].transform.parent = this.transform;
+
+            mControllers[i].layer = 8;
+
+            
+            GameObject axis = Instantiate<GameObject>(Resources.Load<GameObject>("Axis"), mControllers[i].transform);
+            axis.SetActive(false);
         }
     }
 }
