@@ -7,7 +7,7 @@ public partial class MyMesh : MonoBehaviour
     void SetRes(float res)
     {
         resolution = (int)res;
-        SetVerticies(res);
+        CalculateEverything();
     }
 
     

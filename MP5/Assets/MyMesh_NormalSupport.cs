@@ -48,7 +48,7 @@ public partial class MyMesh : MonoBehaviour {
             int third = 0;
 
             if(o%2 == 0){ // even
-                first = verticesPerRow + row_num + pos_in_lst;
+                first = resolution + row_num + pos_in_lst;
                 second = first + 1;
                 third = pos_in_lst + row_num;
                 triNormal[o] = FaceNormal(v, first, second, third);
@@ -56,7 +56,7 @@ public partial class MyMesh : MonoBehaviour {
             else // odd
             {
                 first = pos_in_lst + row_num;
-                second = first + verticesPerRow + 1;
+                second = first + resolution + 1;
                 third = first + 1;
                 triNormal[o] = FaceNormal(v, first, second, third);
             }

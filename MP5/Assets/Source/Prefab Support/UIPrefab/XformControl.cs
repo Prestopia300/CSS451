@@ -8,7 +8,7 @@ public class XformControl : MonoBehaviour {
     public SliderWithEcho X, Y, Z;
     public Text ObjectName;
 
-    private Transform mSelected;
+    private MyMesh mSelected;
     private Vector3 mPreviousSliderValues = Vector3.zero;
 
 	// Use this for initialization
@@ -94,7 +94,7 @@ public class XformControl : MonoBehaviour {
     //---------------------------------------------------------------------------------
 
     // new object selected
-    public void SetSelectedObject(Transform xform)
+    public void SetSelectedObject(MyMesh xform)
     {
         mSelected = xform;
         mPreviousSliderValues = Vector3.zero;
@@ -120,14 +120,14 @@ public class XformControl : MonoBehaviour {
         if (T.isOn)
         {
             if (mSelected != null)
-                p = mSelected.localPosition;
+                p = mSelected.UVt;
             else
                 p = Vector3.zero;
         }
         else if (S.isOn)
         {
             if (mSelected != null)
-                p = mSelected.localScale;
+                p = mSelected.UVs;
             else
                 p = Vector3.one;
         }
@@ -145,14 +145,14 @@ public class XformControl : MonoBehaviour {
 
         if (T.isOn)
         {
-            mSelected.localPosition = p;
+            mSelected.UVt = p;
         }
         else if (S.isOn)
         {
-            mSelected.localScale = p;
+            mSelected.UVs = p;
         } else
         {
-            mSelected.localRotation *= q;
+            // mSelected. *= q;
         }
     }
 }
