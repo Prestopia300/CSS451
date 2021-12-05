@@ -12,7 +12,7 @@ public partial class MyMesh : MonoBehaviour {
     public const int MinRes = 2;
     public const int MaxRes = 20;
 
-    int resolution = 2;
+    int resolution = 5;
 
     int numTriangles;
     int trianglesPerRow;
@@ -58,10 +58,12 @@ public partial class MyMesh : MonoBehaviour {
 
         ToggleController(false);
 
-        ResSlider.InitSliderRange(MinRes, MaxRes, 8);
+        ResSlider.InitSliderRange(MinRes, MaxRes, 5);
 
         ResSlider.SetSliderListener(SetRes);
 
+        UVs = Vector3.one;
+        UVt = Vector3.zero;
         FindObjectOfType<XformControl>().SetSelectedObject(this);
         #region define a circle
         //{
