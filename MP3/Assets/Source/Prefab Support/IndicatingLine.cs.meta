@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 83cdd7e291d2e1e4e90ab2586ae9d144
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - Plane: {instanceID: 0}
+  - Ball: {instanceID: 0}
+  - ShadowPrefab: {fileID: 3001663044735141078, guid: f431923a972a312409f97c258499b4b6, type: 3}
+  - Shadow: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
